@@ -53,6 +53,7 @@ public class Try1 extends JFrame{
 		        try {
 		        @SuppressWarnings("resource")
 				Scanner sc = new Scanner(f); 
+	        	 
 		        magicnum= sc.next();
 		        if(magicnum.equals("P3") || magicnum.equals("P1")) {
 		        	
@@ -107,7 +108,6 @@ public class Try1 extends JFrame{
 						new BufferedInputStream(fileReader);
 				DataInputStream dis;
 				magicnum="";
-			
 				
 				  while (true) {
 			             int b = bufferedReader.read();
@@ -160,7 +160,8 @@ public class Try1 extends JFrame{
 			        		for(int n=0;n<2;n++) {
 			        			imageP6[n]=bufferedReader.read();
 			        		}
-			        		imageColor[j] = new Color(image[j],imageP6[0],imageP6[1]);
+			        		imageColor[j] = new Color(image[j],
+			        				imageP6[0],imageP6[1]);
 			        	}
 			        	bufferedReader.close();
 			        	
@@ -168,40 +169,42 @@ public class Try1 extends JFrame{
 			        }
 			        
 			        else {
-			        dis = new DataInputStream(bufferedReader);
-			        int k = 0; 
+				       
+			        	
+				    dis = new DataInputStream(bufferedReader);
+				    
+			        int k =numOfRows*numOfCols-1; 	      
+			        int bs;
 			        
-			        while(dis.available() != 0  && k <  numOfRows*numOfCols) {
-			        	
-			        	
-			        Byte ba= dis.readByte();
-			        	
-			        /*	if(Character.isWhitespace(ba))
-			        			continue;*/
-			           
-			        	String data = Integer.toBinaryString(ba);
-			        	
-			        //	System.out.println(data);
-			        	
-			        	char[] bin = data.toCharArray();
-			        	
-			        	for(char da : bin) {
-				        	//System.out.println( k + " " + da);
-			        		imageColor[k] = da == '0' ? Color.WHITE : Color.BLACK;
-			        		k++;
+			         while(dis.available() != 0) {
+			        	 bs=dis.readUnsignedByte();
+			        	 if(Character.isWhitespace(bs)  || bs == '\b')
+			        		 continue;
+			        	 
+			        	 System.out.println(bs + " s ");
+					    String data = Integer.toBinaryString(bs);
+			 					    
+			        	 
+			        	 if(data.length() < 8) {
+			        		 for(int jk=data.length();jk<8;jk++)
+			        		  data=0+data;
+			        	 }
+						
+			        	 System.out.println(data);
+
+			        	 char[] bin = data.toCharArray();
+
+					    for(char binary : bin ) {
+			        		imageColor[k] = binary == '0' ? Color.WHITE:Color.BLACK;
+
+					     k--;
+			         }
+				        	}
+			         dis.close();
+		             	 System.out.println(k + " length  \n right : " + numOfRows*numOfCols +
+		             			 "\nDif = " + (k-(numOfRows*numOfCols)));
+
 			        	}
-			        }
-
-			        bufferedReader.close();
-		            dis.close();
-			        
-			        	
-
-			        System.out.println(k);
-			        
-
-			        }
-			        
 			        dp.repaint();
 
 			        
